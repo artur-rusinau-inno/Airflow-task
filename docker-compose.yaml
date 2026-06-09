@@ -81,6 +81,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -118,6 +119,21 @@ services:
       retries: 50
       start_period: 30s
     restart: always
+
+  mongodb:
+    image: mongodb/mongodb-atlas-local
+    hostname: mongodb
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - mongo_db:/data/db
+      - configdb:/data/configdb
+      - mongot:/data/mongot
+
 
   airflow-apiserver:
     <<: *airflow-common
@@ -335,3 +351,6 @@ services:
 
 volumes:
   postgres-db-volume:
+  mongo_db:
+  configdb:
+  mongot:
