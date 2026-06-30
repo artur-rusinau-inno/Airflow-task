@@ -1,6 +1,7 @@
-from airflow.providers.google.suite.hooks.drive import GoogleDriveHook
+from airflow.providers.google.suite.sensors.drive import GoogleDriveFileExistenceSensor
 from airflow.sdk import dag, task, task_group
 
+from config.settings import settings
 from dags.assets import dataset_transformed
 
 # from airflow.providers.google.cloud.transfers.gdrive_to_local import GoogleDriveToLocalOperator
@@ -9,12 +10,18 @@ from dags.assets import dataset_transformed
 @dag
 def my_dag():
 
-    @task.sensor
-    def file_sensor():
-        hook = GoogleDriveHook()
+    gdrive_sensor = GoogleDriveFileExistenceSensor(
+        task_id="wait_for_gdrive_file",
+        poke_interval=10,
+        timeout=60,
+        folder_id=settings.GOOGLE_DISK_FOLDER_ID,
+        file_name=settings.GOOGLE_FILE_NAME,
+    )
 
     @task.branch
-    def check_if_file_empty(file):
+    def check_if_file_empty():
+        file = False
+
         if not file:
             return "log_file_empty"
         else:
@@ -42,7 +49,7 @@ def my_dag():
     def end(): ...
 
     (
-        file_sensor()
+        gdrive_sensor
         >> check_if_file_empty()
         >> [file_processing(), log_file_empty()]
         >> end()

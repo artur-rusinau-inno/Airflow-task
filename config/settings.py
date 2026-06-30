@@ -25,5 +25,8 @@ class Settings(BaseSettings):
 
     mongo_settings: MongoSettings = MongoSettings()
 
+    GOOGLE_DISK_FOLDER_ID: str = "13d_tD5l0oczRt36_271iBHjnMdMMYRzm"
+    GOOGLE_FILE_NAME: str = "titanic.csv"
+
 
 settings = Settings()
