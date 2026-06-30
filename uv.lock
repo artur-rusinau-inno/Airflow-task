@@ -172,6 +172,7 @@ dependencies = [
     { name = "apache-airflow-providers-google" },
     { name = "apache-airflow-providers-mongo" },
     { name = "pandas" },
+    { name = "pydantic-settings" },
 ]
 
 [package.metadata]
@@ -180,6 +181,7 @@ requires-dist = [
     { name = "apache-airflow-providers-google", specifier = ">=22.1.0" },
     { name = "apache-airflow-providers-mongo", specifier = ">=5.4.0" },
     { name = "pandas", specifier = ">=3.0.3" },
+    { name = "pydantic-settings", specifier = ">=2.14.1" },
 ]
 
 [[package]]
