@@ -12,4 +12,4 @@ wheels/
 
 logs/
 test_dags/
-keys/google_key.json
+keys/

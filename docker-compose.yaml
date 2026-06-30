@@ -83,6 +83,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/data:/opt/airflow/data
+    - ${AIRFLOW_PROJ_DIR:-.}/keys:/opt/airflow/keys
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -121,16 +122,16 @@ services:
       start_period: 30s
     restart: always
 
-  mongodb:
+  mongo:
     image: mongo:7.0
+    restart: always
     environment:
-      - MONGODB_INITDB_ROOT_USERNAME=${MONGO_USER}
-      - MONGODB_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
     ports:
       - 27017:27017
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
-      - mongo_db:/data/db
+      - mongo-db-volume:/data/db
 
 
   airflow-apiserver:
@@ -349,4 +350,4 @@ services:
 
 volumes:
   postgres-db-volume:
-  mongo_db:
+  mongo-db-volume:

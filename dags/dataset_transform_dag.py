@@ -1,8 +1,8 @@
+from airflow.providers.google.suite.hooks.drive import GoogleDriveHook
 from airflow.sdk import dag, task, task_group
 
 from dags.assets import dataset_transformed
 
-# from airflow.providers.google.suite.hooks.drive import GoogleDriveHook
 # from airflow.providers.google.cloud.transfers.gdrive_to_local import GoogleDriveToLocalOperator
 
 
@@ -10,7 +10,8 @@ from dags.assets import dataset_transformed
 def my_dag():
 
     @task.sensor
-    def file_sensor(): ...
+    def file_sensor():
+        hook = GoogleDriveHook()
 
     @task.branch
     def check_if_file_empty(file):
