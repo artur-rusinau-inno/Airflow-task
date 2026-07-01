@@ -4,7 +4,11 @@ from airflow.sdk import dag, task
 
 from config.settings import settings
 from plugins.assets import dataset_transformed
-from plugins.mongo_qieries import LESS_THAN_5_LENGHT_COMMENTS, TOP_5_COMMENTS
+from plugins.mongo_qieries import (
+    AVG_RATING_EACH_DAY,
+    LESS_THAN_5_LENGHT_COMMENTS,
+    TOP_5_COMMENTS,
+)
 
 
 @dag(schedule=[dataset_transformed])
@@ -37,6 +41,12 @@ def mongo_dag():
         )
         for index, comment in enumerate(less_than_5_lenght_comments, 1):
             print(f"{index}) {comment.get('content')}")
+
+        print("=" * 20)
+
+        avg_rating_each_day = list(collection.aggregate(AVG_RATING_EACH_DAY))
+        for index, day in enumerate(avg_rating_each_day, 1):
+            print(f"{index}) {day.get('timestamp')} === {day.get('avg_rating')}")
 
     upload_data() >> run_queries()
 
