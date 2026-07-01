@@ -1,5 +1,5 @@
 dataset_transform_dag
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 mongo_dag
-![alt text](image-3.png)
+![alt text](images/image-3.png)
